@@ -36,6 +36,9 @@ declare namespace Aeolz {
 
   export const Tick: typeof import("./objects/Tick").Tick
   export type Tick = import("./objects/Tick").Tick
+
+  export const Utils: typeof import("./objects/Utils").Utils
+  export type Utils = import("./objects/Utils").Utils
 }
 
 export default Aeolz

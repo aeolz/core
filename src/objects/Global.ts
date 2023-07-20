@@ -62,7 +62,7 @@ export namespace Global {
       if (silence) return
       Utils.createError(`No loop with name '${loopName}' was found`)
     }
-    loops[loopName].createRequest(
+    loops[loopName].request(
       typeof request === "function" ? { callback: request } : request
     )
   }

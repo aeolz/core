@@ -1,14 +1,14 @@
 {
   "name": "@aeolz/core",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Aeolz Core Kit",
   "main": "./lib/index.js",
   "typings": "./lib/index-types.d.ts",
   "scripts": {
     "test:watch": "nodemon src/test/index.ts",
     "test:prod": "nodemon test/index.js",
-    "build": "rm -rf lib && tsc && cp ./src/index-types.d.ts ./lib/index-types.d.ts",
     "build:link": "npm run build && npm link",
+    "build": "rm -rf lib && tsc && cp ./src/index-types.d.ts ./lib/index-types.d.ts",
     "build:publish": "npm run build && npm publish --force"
   },
   "keywords": [

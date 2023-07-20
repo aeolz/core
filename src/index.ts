@@ -6,6 +6,7 @@ import { PureSignal } from "./objects/PureSignal"
 import { Signal } from "./objects/Signal"
 import { Template } from "./objects/Template"
 import { Tick } from "./objects/Tick"
+import { Utils } from "./objects/Utils"
 
 const Aeolz = {
   Signal: Signal,
@@ -16,6 +17,7 @@ const Aeolz = {
   Template: Template,
   Loop: Loop,
   Tick: Tick,
+  Utils: Utils
 }
 
 export default Aeolz
