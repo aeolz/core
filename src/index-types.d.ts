@@ -45,6 +45,9 @@ declare namespace Aeolz {
 
   export const Timeout: typeof import("./objects/Timeout").Timeout
   export type Timeout = import("./objects/Timeout").Timeout
+
+  export const RateLimiter: typeof import("./objects/RateLimiter").RateLimiter
+  export type RateLimiter = import("./objects/RateLimiter").RateLimiter
 }
 
 export default Aeolz

@@ -4,6 +4,7 @@ import { Global } from "./objects/Global"
 import { Interval } from "./objects/Interval"
 import { Loop } from "./objects/Loop"
 import { PureSignal } from "./objects/PureSignal"
+import { RateLimiter } from "./objects/RateLimiter"
 import { Signal } from "./objects/Signal"
 import { Template } from "./objects/Template"
 import { Tick } from "./objects/Tick"
@@ -22,6 +23,7 @@ const Aeolz = {
   Utils: Utils,
   Timeout: Timeout,
   Interval: Interval,
+  RateLimiter: RateLimiter,
 }
 
 export default Aeolz
