@@ -14,7 +14,7 @@ export namespace Global {
   export let silence: boolean = false
 
   export type LoopRequest = {
-    callback: () => void
+    callback: (...args: any[]) => void
     limitedTick?: Tick
   }
 

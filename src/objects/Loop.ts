@@ -18,7 +18,7 @@ export type LoopOptions = {
 } & (
   | { timeInSeconds: number }
   | {
-      engine: (completeRequests: () => void) => void
+      engine: (completeRequests: Global.LoopRequest["callback"]) => void
       onDestroy: (this: Loop) => void
     }
 )
@@ -26,6 +26,7 @@ export type LoopOptions = {
 export class Loop {
   private loopRequests: Global.LoopRequest[] = []
   private interval?: NodeJS.Timer
+  protected destroyed = false
 
   constructor(
     readonly name: keyof Aeolz.LoopList,
@@ -49,6 +50,7 @@ export class Loop {
   }
 
   destroy(): this {
+    this.destroyed = true
     clearInterval(this.interval)
     this.interval = null
     if ("engine" in this.options) this.options.onDestroy.call(this)
@@ -69,10 +71,10 @@ export class Loop {
     return this
   }
 
-  private callback(): void {
+  protected callback(...args: any[]): void {
     this.loopRequests.forEach((request) => {
       if (request.limitedTick && request.limitedTick.limited()) return
-      request.callback()
+      request.callback(...args)
     })
   }
 }
