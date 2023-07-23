@@ -39,6 +39,12 @@ declare namespace Aeolz {
 
   export const Utils: typeof import("./objects/Utils").Utils
   export type Utils = import("./objects/Utils").Utils
+
+  export const Interval: typeof import("./objects/Interval").Interval
+  export type Interval = import("./objects/Interval").Interval
+
+  export const Timeout: typeof import("./objects/Timeout").Timeout
+  export type Timeout = import("./objects/Timeout").Timeout
 }
 
 export default Aeolz
