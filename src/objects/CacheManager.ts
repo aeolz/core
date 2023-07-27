@@ -29,8 +29,13 @@ export const enum CacheStatus {
 }
 
 export class CacheManager<T extends object = any> {
-  private data = <{ [k: string | number | symbol]: any }>{}
+  private data: { [k: string | number | symbol]: any }
   private _status: CacheStatus = CacheStatus.editable
+
+  private getInitalState() {
+    return { ...(Gettable(this.options.initialValue) || {}) }
+  }
+
   constructor(public options: CacheOptions<T> = {}) {
     if (options.global) {
       if (!options.name) {
@@ -39,6 +44,8 @@ export class CacheManager<T extends object = any> {
         Global.registerCache(this)
       }
     }
+
+    this.data = this.getInitalState()
   }
 
   set<K extends keyof T>(key: K, data: T[K]): this
@@ -77,6 +84,11 @@ export class CacheManager<T extends object = any> {
   destroy(): void {
     this._status = CacheStatus.destroyed
     if (this.options.global) Global.removeGlobalCache(this)
+  }
+
+  clear(): this {
+    this.data = this.getInitalState()
+    return this
   }
 
   get status(): CacheStatus {

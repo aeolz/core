@@ -64,7 +64,7 @@ export class Template<I extends readonly any[] = readonly any[]> {
           items.push(this.options.default)
         }
       } else {
-        const val = recursiveKey(item.key, data)
+        const val = getValueFromObject(data, item.key)
         items.push(
           templateToUse instanceof Template
             ? item.each && Array.isArray(val)
@@ -106,9 +106,11 @@ export class Template<I extends readonly any[] = readonly any[]> {
 
 function assignValue(obj: object, key: string, value: any): void {
   const keys = key.split(".")
-  const lastKey = keys.pop()
+  let lastKey = keys.pop()
+  if (lastKey?.endsWith("()")) lastKey = lastKey.slice(0, -2)
 
   keys.reduce((nestedObj, nestedKey) => {
+    if (nestedKey.endsWith("()")) nestedKey = nestedKey.slice(0, -2)
     if (!nestedObj[nestedKey]) {
       nestedObj[nestedKey] = {}
     }
@@ -121,10 +123,21 @@ function recursiveKeyExists(key: string, obj: object) {
   if (keyArr.length === 0) return false
   let val: any = obj
   while (keyArr.length > 0) {
-    if (!val || typeof val !== "object") return false
-    const key = keyArr.shift()
+    let key = keyArr.shift()
+    if (
+      !val ||
+      (typeof val !== "object" &&
+        (!key.endsWith("()") || typeof val !== "function"))
+    )
+      return false
+
+    let callable = false
+    if (key.endsWith("()")) {
+      key = key.slice(0, -2)
+      callable = true
+    }
     if (key in val) {
-      val = val[key]
+      val = callable ? val[key]() : val[key]
     } else {
       return false
     }
@@ -132,17 +145,41 @@ function recursiveKeyExists(key: string, obj: object) {
   return true
 }
 
-function recursiveKey(key: string, obj: object) {
-  const keyArr = key.split(".")
-  let val: any = obj
-  while (keyArr.length > 0) {
-    const key = keyArr.shift()
-    if (!val || typeof val !== "object") return undefined
-    if (key in val) {
-      val = val[key]
+// function recursiveKey(key: string, obj: object) {
+//   const keyArr = key.split(".")
+//   let val: any = obj
+//   while (keyArr.length > 0) {
+//     const key = keyArr.shift()
+//     if (!val || typeof val !== "object") return undefined
+//     if (key in val) {
+//       val = val[key]
+//     } else {
+//       return undefined
+//     }
+//   }
+//   return val
+// }
+
+function getValueFromObject(obj: any, key: string): any {
+  const keys = key.split(".")
+
+  return keys.reduce((acc, currKey) => {
+    // Check if the key is a callable property (ends with ())
+    if (currKey.endsWith("()")) {
+      // Extract the actual key without ()
+      currKey = currKey.slice(0, -2)
+
+      if (typeof acc[currKey] === "function") {
+        return acc[currKey]()
+      } else {
+        throw new Error(`Property '${currKey}' is not a function.`)
+      }
     } else {
-      return undefined
+      if (!acc[currKey]) {
+        throw new Error(`Property '${currKey}' does not exist.`)
+      }
+
+      return acc[currKey]
     }
-  }
-  return val
+  }, obj)
 }

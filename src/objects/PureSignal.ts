@@ -2,7 +2,7 @@ import { EventEmitter, Listener } from "../utils/event-emitter"
 import { SignalCreator, SignalOptions } from "./Signal"
 
 export type SignalDefaultEvents<T> = {
-  change: [T]
+  change: [newValue: T, oldValue: T]
 }
 
 /**
@@ -34,8 +34,9 @@ export class PureSignalCreator<T extends any> {
    * @returns {this}
    */
   setValue(val: T): this {
+    const old = this.value
     this.value = val
-    this.emitter.emit("change", val)
+    this.emitter.emit("change", val, old)
     return this
   }
 
