@@ -145,21 +145,6 @@ function recursiveKeyExists(key: string, obj: object) {
   return true
 }
 
-// function recursiveKey(key: string, obj: object) {
-//   const keyArr = key.split(".")
-//   let val: any = obj
-//   while (keyArr.length > 0) {
-//     const key = keyArr.shift()
-//     if (!val || typeof val !== "object") return undefined
-//     if (key in val) {
-//       val = val[key]
-//     } else {
-//       return undefined
-//     }
-//   }
-//   return val
-// }
-
 function getValueFromObject(obj: any, key: string): any {
   const keys = key.split(".")
 
@@ -175,7 +160,7 @@ function getValueFromObject(obj: any, key: string): any {
         throw new Error(`Property '${currKey}' is not a function.`)
       }
     } else {
-      if (!acc[currKey]) {
+      if (!(currKey in acc)) {
         throw new Error(`Property '${currKey}' does not exist.`)
       }
 
