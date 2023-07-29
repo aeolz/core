@@ -11,7 +11,7 @@ export class Utils {
    * @param of of number example: 300
    * @returns 300 * 12 / 100 === 36
    */
-  percentOf(percentage: number, of: number) {
+  static percentOf(percentage: number, of: number) {
     return (of * percentage) / 100 || 0
   }
 
@@ -20,7 +20,7 @@ export class Utils {
    * @param from from number example: 30
    * @returns 12/30*100 === 40%
    */
-  percentFrom(target: number, from: number) {
+  static percentFrom(target: number, from: number) {
     return (target / from) * 100 || 0
   }
 
