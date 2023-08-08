@@ -1,4 +1,5 @@
 import { CacheManager } from "./objects/CacheManager"
+import { DailyScheduler } from "./objects/DailyScheduler"
 import { Enumerable } from "./objects/Decorators"
 import { Global } from "./objects/Global"
 import { Interval } from "./objects/Interval"
@@ -24,6 +25,7 @@ const Aeolz = {
   Timeout: Timeout,
   Interval: Interval,
   RateLimiter: RateLimiter,
+  DailyScheduler: DailyScheduler,
 }
 
 export default Aeolz

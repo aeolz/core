@@ -48,6 +48,9 @@ declare namespace Aeolz {
 
   export const RateLimiter: typeof import("./objects/RateLimiter").RateLimiter
   export type RateLimiter = import("./objects/RateLimiter").RateLimiter
+
+  export const DailyScheduler: typeof import("./objects/DailyScheduler").DailyScheduler
+  export type DailyScheduler = import("./objects/DailyScheduler").DailyScheduler
 }
 
 export default Aeolz

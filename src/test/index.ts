@@ -1,5 +1,6 @@
 import Aeolz from "../index"
 import { CacheManager } from "../objects/CacheManager"
+import { DailyScheduler } from "../objects/DailyScheduler"
 
 const UserTemplate = new Aeolz.Template<[[string, number], string, string]>(
   [
@@ -28,11 +29,23 @@ const obj = {
 
 const cache = new CacheManager({ initialValue: { map: [] } })
 
-console.log(cache.get("map"))
-cache.set("map", [1, 2, [1, 5]])
-console.log(cache.get("map"))
-cache.clear()
-console.log(cache.get("map"))
+// console.log(cache.get("map"))
+// cache.set("map", [1, 2, [1, 5]])
+// console.log(cache.get("map"))
+// cache.clear()
+// console.log(cache.get("map"))
+const obje = { d: 0 }
+const daily = new DailyScheduler({
+  checkEverySeconds: 1,
+  getLastCheckTime: () => obje.d,
+  setLastCheckTime: async (newD) => {
+    obje.d = newD
+  },
+})
+  .register(() => {
+    console.log("one time per day")
+  })
+  .start()
 
 Aeolz.Global.silence = true
 // const loop = new Armory.Loop(null, { global: true, timeInSeconds: 10 })
