@@ -1,6 +1,6 @@
 {
   "name": "@aeolz/core",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Aeolz Core Kit",
   "main": "./lib/index.js",
   "typings": "./lib/index-types.d.ts",
