@@ -1,3 +1,4 @@
+import luxon = require("luxon")
 import { Loop } from "./Loop"
 
 export type DailySchedulerOptions = {
@@ -18,6 +19,7 @@ export type DailySchedulerOptions = {
    * Whether or not to cache first time getLastCheckTime, to avoid external db calls
    */
   cacheGetter?: boolean
+  timeZone: string
 }
 
 export class DailyScheduler {
@@ -29,6 +31,7 @@ export class DailyScheduler {
   private targetHour: number
   private _lastCheck: number
   private cacheGetter: boolean
+  private timeZone: string
 
   constructor(options: DailySchedulerOptions) {
     this.getLastCheckTime = options.getLastCheckTime
@@ -36,6 +39,7 @@ export class DailyScheduler {
     this.checkEverySeconds = options.checkEverySeconds
     this.targetHour = options.targetHour
     this.cacheGetter = !!options.cacheGetter
+    this.timeZone = options.timeZone
   }
 
   register(fn: () => Promise<void> | void) {
@@ -66,21 +70,37 @@ export class DailyScheduler {
 
   async schedule() {
     const lastCheckTime = await this.cachedLastCheckTime()
+    const currentTime = luxon.DateTime.now()
 
-    const currentTime = Date.now()
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000 // 24 hours
+    const currentZoneTime = currentTime.setZone(this.timeZone)
 
-    const today = new Date(currentTime)
-    today.setHours(this.targetHour, 0, 0, 0)
+    const nextUpdateTime = currentZoneTime.set({
+      hour: this.targetHour,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    })
+
     if (
-      currentTime - lastCheckTime >= oneDayInMilliseconds &&
-      currentTime >= today.getTime()
+      currentZoneTime.hour >= nextUpdateTime.hour &&
+      currentTime.toMillis() - lastCheckTime >= 24 * 60 * 60 * 1000
     ) {
+      console.log(currentTime.hour, currentZoneTime.hour, nextUpdateTime.hour)
       this.checkFunction.forEach((fn) => fn())
-      this._lastCheck = today.getTime()
-      this.setLastCheckTime(today.getTime())
-      // Update the last check time
-      // You need to implement the logic to update the last check time using your storage mechanism.
+      this._lastCheck = currentTime.toMillis()
+      this.setLastCheckTime(currentTime.toMillis())
     }
+  }
+
+  getNextUpdateTime(): luxon.DateTime {
+    const currentTime = luxon.DateTime.now()
+
+    const currentZoneTime = currentTime.setZone(this.timeZone)
+
+    const nextUpdateTime = currentZoneTime
+      .plus({ days: 1 })
+      .set({ hour: this.targetHour, minute: 0, second: 0, millisecond: 0 })
+
+    return nextUpdateTime
   }
 }

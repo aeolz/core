@@ -34,18 +34,20 @@ const cache = new CacheManager({ initialValue: { map: [] } })
 // console.log(cache.get("map"))
 // cache.clear()
 // console.log(cache.get("map"))
-const obje = { d: 0 }
-const daily = new DailyScheduler({
-  checkEverySeconds: 1,
-  getLastCheckTime: () => obje.d,
-  setLastCheckTime: async (newD) => {
-    obje.d = newD
-  },
-})
-  .register(() => {
-    console.log("one time per day")
-  })
-  .start()
+// const obje = { d: Date.now() - 87000000 }
+// const daily = new DailyScheduler({
+//   checkEverySeconds: 1,
+//   getLastCheckTime: () => obje.d,
+//   setLastCheckTime: async (newD) => {
+//     obje.d = newD
+//   },
+//   targetHour: 19,
+//   timeZone: "Europe/Moscow",
+// })
+//   .register(() => {
+//     console.log("one time per day")
+//   })
+//   .start()
 
 Aeolz.Global.silence = true
 // const loop = new Armory.Loop(null, { global: true, timeInSeconds: 10 })
