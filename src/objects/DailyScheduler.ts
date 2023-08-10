@@ -85,14 +85,17 @@ export class DailyScheduler {
       currentZoneTime.hour >= nextUpdateTime.hour &&
       currentTime.toMillis() - lastCheckTime >= 24 * 60 * 60 * 1000
     ) {
-      console.log(currentTime.hour, currentZoneTime.hour, nextUpdateTime.hour)
       this.checkFunction.forEach((fn) => fn())
       this._lastCheck = currentTime.toMillis()
       this.setLastCheckTime(currentTime.toMillis())
     }
   }
 
-  getNextUpdateTime(): luxon.DateTime {
+  /**
+   *
+   * @returns milliseconds
+   */
+  getNextUpdateTime(): number {
     const currentTime = luxon.DateTime.now()
 
     const currentZoneTime = currentTime.setZone(this.timeZone)
@@ -101,6 +104,6 @@ export class DailyScheduler {
       .plus({ days: 1 })
       .set({ hour: this.targetHour, minute: 0, second: 0, millisecond: 0 })
 
-    return nextUpdateTime
+    return nextUpdateTime.toMillis()
   }
 }
