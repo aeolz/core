@@ -85,9 +85,9 @@ export class DailyScheduler {
       currentZoneTime.hour >= nextUpdateTime.hour &&
       currentTime.toMillis() - lastCheckTime >= 24 * 60 * 60 * 1000
     ) {
-      this.checkFunction.forEach((fn) => fn())
+      await this.setLastCheckTime(currentTime.toMillis())
       this._lastCheck = currentTime.toMillis()
-      this.setLastCheckTime(currentTime.toMillis())
+      this.checkFunction.forEach((fn) => fn())
     }
   }
 
